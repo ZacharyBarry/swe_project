@@ -26,20 +26,18 @@ export function App() {
           <span>
             Projects <span className="slash">/</span> Campus renovation
           </span>
-          <span className="prototype-badge">STARTER PROTOTYPE</span>
+          <span className="prototype-label">Sample workspace</span>
         </header>
         <main id="main" tabIndex={-1}>
           <div className="page-heading">
             <div>
-              <p className="eyebrow">PROJECT WORKSPACE</p>
               <h1>{selected.title}</h1>
               <p>
                 {page === 'overview'
-                  ? 'The starting point for your next walkthrough.'
-                  : 'A space for what comes next.'}
+                  ? 'Project information and available tools.'
+                  : 'Feature placeholder.'}
               </p>
             </div>
-            <span className="sample-tag">Sample data</span>
           </div>
           {page === 'overview' ? <ProjectOverview /> : <BufferPage />}
           <footer>
