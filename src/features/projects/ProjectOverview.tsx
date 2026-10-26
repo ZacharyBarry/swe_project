@@ -27,16 +27,21 @@ export function ProjectOverview() {
           <span>Available sections</span>
         </div>
         <div className="tool-row">
-          <span className="tool-number" aria-hidden="true">01</span>
+          <span className="tool-number" aria-hidden="true">
+            01
+          </span>
           <div className="tool-description">
-            <h3>Buffer</h3>
-            <p>A reserved space for the next feature.</p>
+            <h3>Drawings</h3>
+            <p>Open and view a PDF drawing.</p>
           </div>
-          <a className="open-link" href="#buffer">Open Buffer</a>
+          <a className="open-link" href="#drawings">
+            Open drawings
+          </a>
         </div>
       </section>
       <p className="prototype-note">
-        This version uses sample data. Drawings and punch-list items are not available yet.
+        PDFs are viewed locally. Saved drawings and punch-list items are not
+        available yet.
       </p>
     </>
   );

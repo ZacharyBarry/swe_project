@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ProjectOverview } from './features/projects/ProjectOverview';
 import { Sidebar } from './components/Sidebar';
 import { pages, readPage, type Page } from './navigation';
-import { BufferPage } from './features/buffer/BufferPage';
+import { DrawingsPage } from './features/drawings/DrawingsPage';
 
 export function App() {
   const [page, setPage] = useState<Page>(readPage);
@@ -35,11 +35,11 @@ export function App() {
               <p>
                 {page === 'overview'
                   ? 'Project information and available tools.'
-                  : 'Feature placeholder.'}
+                  : 'Open a PDF drawing from your computer.'}
               </p>
             </div>
           </div>
-          {page === 'overview' ? <ProjectOverview /> : <BufferPage />}
+          {page === 'overview' ? <ProjectOverview /> : <DrawingsPage />}
           <footer>
             Architectural Punch List <span>CMSC 447 · Group 5</span>
           </footer>

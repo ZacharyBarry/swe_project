@@ -1,0 +1,116 @@
+.drawing-file-bar,
+.pdf-toolbar,
+.pdf-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.drawing-file-bar {
+  padding: 22px;
+  border: 1px solid #d8dad4;
+  background: #fafaf7;
+}
+
+.drawing-file-bar label {
+  font-weight: 600;
+}
+
+.drawing-file-bar p,
+.drawing-note {
+  margin: 6px 0 0;
+  color: #656a6c;
+  font-size: 12px;
+}
+
+.drawing-file-bar input {
+  max-width: 100%;
+  font: inherit;
+}
+
+.pdf-toolbar {
+  padding: 20px 0 14px;
+}
+
+.pdf-filename {
+  overflow-wrap: anywhere;
+  min-width: 0;
+  font-weight: 600;
+}
+
+.pdf-pagination {
+  justify-content: flex-start;
+  font-size: 12px;
+}
+
+.pdf-pagination button,
+.drawing-file-bar input::file-selector-button {
+  padding: 9px 12px;
+  border: 1px solid #bfc3be;
+  border-radius: 3px;
+  background: #fafaf7;
+  color: #252729;
+  font: inherit;
+  cursor: pointer;
+}
+
+.drawing-file-bar input::file-selector-button {
+  margin-right: 12px;
+}
+
+.pdf-pagination button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.drawings button:focus-visible,
+.drawings input:focus-visible {
+  outline: 2px solid #a87b14;
+  outline-offset: 4px;
+}
+
+.pdf-stage {
+  padding: 20px;
+  min-height: 260px;
+  border: 1px solid #d8dad4;
+  background: #e3e5df;
+}
+
+.pdf-page canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.drawing-empty {
+  padding: 40px 0;
+  min-height: 250px;
+}
+
+.drawing-empty h2 {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.drawing-empty p,
+.drawing-message {
+  color: #656a6c;
+}
+
+.drawing-error {
+  color: #952f24;
+}
+
+.drawing-note {
+  margin: 14px 0 28px;
+}
+
+@media (max-width: 650px) {
+  .pdf-stage {
+    padding: 8px;
+  }
+}
