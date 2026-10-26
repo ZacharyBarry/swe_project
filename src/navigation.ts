@@ -1,7 +1,7 @@
-export type Page = 'overview' | 'buffer';
+export type Page = 'overview' | 'drawings';
 export const pages: { id: Page; title: string }[] = [
   { id: 'overview', title: 'Overview' },
-  { id: 'buffer', title: 'Buffer' },
+  { id: 'drawings', title: 'Drawings' },
 ];
 export function readPage(): Page {
   const hash = window.location.hash.slice(1);
