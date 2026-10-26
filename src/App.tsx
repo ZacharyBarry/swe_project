@@ -3,9 +3,28 @@ import { ProjectOverview } from './features/projects/ProjectOverview';
 import { Sidebar } from './components/Sidebar';
 import { pages, readPage, type Page } from './navigation';
 import { DrawingsPage } from './features/drawings/DrawingsPage';
+import {
+  PunchListPage,
+  type PunchItem,
+  type PunchItemStatus,
+} from './features/punch-list/PunchListPage';
 
 export function App() {
   const [page, setPage] = useState<Page>(readPage);
+  const [punchItems, setPunchItems] = useState<PunchItem[]>([]);
+
+  function addPunchItem(title: string, description: string) {
+    setPunchItems((items) => [
+      ...items,
+      { id: crypto.randomUUID(), title, description, status: 'Open' },
+    ]);
+  }
+
+  function updatePunchItemStatus(id: string, status: PunchItemStatus) {
+    setPunchItems((items) =>
+      items.map((item) => (item.id === id ? { ...item, status } : item))
+    );
+  }
 
   useEffect(() => {
     const update = () => setPage(readPage());
@@ -35,11 +54,23 @@ export function App() {
               <p>
                 {page === 'overview'
                   ? 'Project information and available tools.'
-                  : 'Open a PDF drawing from your computer.'}
+                  : page === 'drawings'
+                    ? 'Open a PDF drawing from your computer.'
+                    : 'Track issues in this browser session.'}
               </p>
             </div>
           </div>
-          {page === 'overview' ? <ProjectOverview /> : <DrawingsPage />}
+          {page === 'overview' ? (
+            <ProjectOverview />
+          ) : page === 'drawings' ? (
+            <DrawingsPage />
+          ) : (
+            <PunchListPage
+              items={punchItems}
+              onAddItem={addPunchItem}
+              onStatusChange={updatePunchItemStatus}
+            />
+          )}
           <footer>
             Architectural Punch List <span>CMSC 447 · Group 5</span>
           </footer>

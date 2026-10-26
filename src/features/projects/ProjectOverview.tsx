@@ -38,10 +38,22 @@ export function ProjectOverview() {
             Open drawings
           </a>
         </div>
+        <div className="tool-row">
+          <span className="tool-number" aria-hidden="true">
+            02
+          </span>
+          <div className="tool-description">
+            <h3>Punch List</h3>
+            <p>Add issues and track their status during this session.</p>
+          </div>
+          <a className="open-link" href="#punch-list">
+            Open punch list
+          </a>
+        </div>
       </section>
       <p className="prototype-note">
-        PDFs are viewed locally. Saved drawings and punch-list items are not
-        available yet.
+        PDFs are viewed locally. Punch-list items are temporary and are lost
+        when this page is refreshed.
       </p>
     </>
   );
