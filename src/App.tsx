@@ -5,19 +5,40 @@ import { pages, readPage, type Page } from './navigation';
 import { DrawingsPage } from './features/drawings/DrawingsPage';
 import {
   PunchListPage,
-  type PunchItem,
-  type PunchItemStatus,
 } from './features/punch-list/PunchListPage';
+import {
+  addPunchItemAttachment,
+  createPunchItem,
+  removePunchItemAttachment,
+  updatePunchItemFields,
+  type PunchItem,
+  type PunchItemFields,
+  type PunchItemStatus,
+} from './features/punch-list/punchItems';
 
 export function App() {
   const [page, setPage] = useState<Page>(readPage);
   const [punchItems, setPunchItems] = useState<PunchItem[]>([]);
 
-  function addPunchItem(title: string, description: string) {
+  function addPunchItem(fields: PunchItemFields) {
     setPunchItems((items) => [
       ...items,
-      { id: crypto.randomUUID(), title, description, status: 'Open' },
+      createPunchItem(crypto.randomUUID(), fields),
     ]);
+  }
+
+  function editPunchItem(id: string, fields: PunchItemFields) {
+    setPunchItems((items) => updatePunchItemFields(items, id, fields));
+  }
+
+  function attachImage(id: string, file: File) {
+    setPunchItems((items) =>
+      addPunchItemAttachment(items, id, { id: crypto.randomUUID(), file })
+    );
+  }
+
+  function removeImage(id: string, attachmentId: string) {
+    setPunchItems((items) => removePunchItemAttachment(items, id, attachmentId));
   }
 
   function updatePunchItemStatus(id: string, status: PunchItemStatus) {
@@ -68,6 +89,9 @@ export function App() {
             <PunchListPage
               items={punchItems}
               onAddItem={addPunchItem}
+              onEditItem={editPunchItem}
+              onAttachImage={attachImage}
+              onRemoveImage={removeImage}
               onStatusChange={updatePunchItemStatus}
             />
           )}

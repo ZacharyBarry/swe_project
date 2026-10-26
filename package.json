@@ -8,7 +8,7 @@
     "dev:server": "tsx watch server/src/index.ts",
     "build": "tsc --noEmit && vite build && tsc -p server/tsconfig.json",
     "start:server": "node server/dist/index.js",
-    "test": "tsx --test server/src/app.test.ts src/features/punch-list/filterPunchItems.test.ts"
+    "test": "tsx --test server/src/app.test.ts src/features/punch-list/filterPunchItems.test.ts src/features/punch-list/punchItems.test.ts"
   },
   "dependencies": {
     "express": "^5.1.0",

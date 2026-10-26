@@ -1,80 +1,68 @@
-import { useState, type FormEvent } from 'react';
-import { filterPunchItems, type PunchItemStatusFilter } from './filterPunchItems';
+import { useEffect, useState } from 'react';
+import { filterPunchItems, filterValues, type PunchItemStatusFilter } from './filterPunchItems';
+import { PunchItemForm } from './PunchItemForm';
+import { PunchItemDetails } from './PunchItemDetails';
+import {
+  emptyPunchItemFields,
+  punchItemStatuses,
+  type PunchItem,
+  type PunchItemFields,
+  type PunchItemStatus,
+} from './punchItems';
 import './punchList.css';
-
-export const punchItemStatuses = [
-  'Open',
-  'In Progress',
-  'Ready for Review',
-] as const;
-
-export type PunchItemStatus = (typeof punchItemStatuses)[number];
-
-export type PunchItem = {
-  id: string;
-  title: string;
-  description: string;
-  status: PunchItemStatus;
-};
 
 type PunchListPageProps = {
   items: PunchItem[];
-  onAddItem: (title: string, description: string) => void;
+  onAddItem: (fields: PunchItemFields) => void;
+  onEditItem: (id: string, fields: PunchItemFields) => void;
+  onAttachImage: (id: string, file: File) => void;
+  onRemoveImage: (id: string, attachmentId: string) => void;
   onStatusChange: (id: string, status: PunchItemStatus) => void;
 };
 
 export function PunchListPage({
   items,
   onAddItem,
+  onEditItem,
+  onAttachImage,
+  onRemoveImage,
   onStatusChange,
 }: PunchListPageProps) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [error, setError] = useState('');
   const [statusFilter, setStatusFilter] = useState<PunchItemStatusFilter>('All');
   const [search, setSearch] = useState('');
-  const matchingItems = filterPunchItems(items, statusFilter, search);
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [locationFilter, setLocationFilter] = useState('');
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  function addItem(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const trimmedTitle = title.trim();
-    const trimmedDescription = description.trim();
-
-    if (!trimmedTitle || !trimmedDescription) {
-      setError('Enter a title and description.');
-      return;
+  useEffect(() => {
+    if (categoryFilter && !items.some((item) => item.category === categoryFilter)) {
+      setCategoryFilter('');
     }
+    if (locationFilter && !items.some((item) => item.roomLocation === locationFilter)) {
+      setLocationFilter('');
+    }
+  }, [items, categoryFilter, locationFilter]);
 
-    onAddItem(trimmedTitle, trimmedDescription);
-    setTitle('');
-    setDescription('');
-    setError('');
-  }
+  const matchingItems = filterPunchItems(
+    items,
+    statusFilter,
+    search,
+    categoryFilter,
+    locationFilter
+  );
+  const selectedItem = items.find((item) => item.id === selectedId);
 
   return (
     <div className="punch-list">
       <section className="punch-list-panel" aria-labelledby="new-item-heading">
         <h2 id="new-item-heading">Add an item</h2>
-        <form onSubmit={addItem}>
-          <label htmlFor="punch-title">Title</label>
-          <input
-            id="punch-title"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-            maxLength={150}
-            required
-          />
-          <label htmlFor="punch-description">Description</label>
-          <textarea
-            id="punch-description"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            rows={4}
-            required
-          />
-          {error && <p className="punch-list-error" role="alert">{error}</p>}
-          <button type="submit">Add item</button>
-        </form>
+        <PunchItemForm
+          idPrefix="new-item"
+          initialValues={emptyPunchItemFields}
+          submitLabel="Add item"
+          onSave={onAddItem}
+          resetAfterSave
+        />
       </section>
 
       <section className="punch-list-panel" aria-labelledby="items-heading">
@@ -105,6 +93,24 @@ export function PunchListPage({
               placeholder="Title or description"
             />
           </label>
+          <label>
+            Filter by category
+            <select value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)}>
+              <option value="">All categories</option>
+              {filterValues(items, 'category').map((category) => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Filter by room / location
+            <select value={locationFilter} onChange={(event) => setLocationFilter(event.target.value)}>
+              <option value="">All locations</option>
+              {filterValues(items, 'roomLocation').map((location) => (
+                <option key={location} value={location}>{location}</option>
+              ))}
+            </select>
+          </label>
         </div>
         <p className="punch-list-count" role="status">
           {matchingItems.length} matching {matchingItems.length === 1 ? 'item' : 'items'}
@@ -120,6 +126,17 @@ export function PunchListPage({
                 <div>
                   <h3>{item.title}</h3>
                   <p>{item.description}</p>
+                  <p className="punch-list-item-meta">
+                    {item.roomLocation || 'No location'} · {item.category || 'No category'}
+                  </p>
+                  <button
+                    type="button"
+                    className="punch-list-view"
+                    onClick={() => setSelectedId(item.id)}
+                    aria-label={`View details for ${item.title}`}
+                  >
+                    View details
+                  </button>
                 </div>
                 <label>
                   Status
@@ -144,6 +161,25 @@ export function PunchListPage({
           </ul>
         )}
       </section>
+      {selectedItem ? (
+        <PunchItemDetails
+          key={selectedItem.id}
+          item={selectedItem}
+          onEditItem={onEditItem}
+          onAttachImage={onAttachImage}
+          onRemoveImage={onRemoveImage}
+          onStatusChange={onStatusChange}
+        />
+      ) : (
+        <section className="punch-list-panel" aria-labelledby="item-details-heading">
+          <h2 id="item-details-heading">Item details</h2>
+          <p className="punch-list-empty">
+            {items.length === 0
+              ? 'Add an item to see its details here.'
+              : 'Select an item to see its details here.'}
+          </p>
+        </section>
+      )}
       <p className="punch-list-note">Items are kept only until this page is refreshed.</p>
     </div>
   );
