@@ -9,7 +9,7 @@ import { PdfPage } from './PdfPage';
 
 GlobalWorkerOptions.workerSrc = workerUrl;
 
-export function PdfViewer({ file }: { file: File }) {
+export function PdfViewer({ file, saved = false }: { file: File; saved?: boolean }) {
   const [pdf, setPdf] = useState<PDFDocumentProxy | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [error, setError] = useState('');
@@ -80,7 +80,7 @@ export function PdfViewer({ file }: { file: File }) {
         </p>
       )}
       <p className="drawing-note">
-        Choose the file again after refreshing or leaving this screen.
+        {saved ? 'This drawing is saved. Reopen it from Saved drawings.' : 'Preview only. Use Save drawing to keep this PDF after refreshing.'}
       </p>
     </div>
   );
