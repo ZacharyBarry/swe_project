@@ -114,3 +114,13 @@
     padding: 8px;
   }
 }
+
+.drawing-file-bar button, .saved-drawings button {
+  padding: 9px 12px; border: 1px solid #bfc3be; border-radius: 3px;
+  background: #fafaf7; color: #252729; font: inherit; cursor: pointer;
+}
+.drawing button:disabled { opacity: .5; cursor: default; }
+.drawing button:focus-visible { outline: 2px solid #a87b14; outline-offset: 4px; }
+.saved-drawings { padding: 16px 0; }
+.saved-drawings ul { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; list-style: none; }
+.saved-drawings button { overflow-wrap: anywhere; max-width: 100%; }
